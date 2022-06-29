@@ -1,6 +1,10 @@
 ## Overview
 The program for calculating the routes of the St. Petersburg metro
 
+To run the file from the command line, use the command:
+
+    java -jar -Dfile.encoding=UTF-8 SPBMetroCalculating.jar
+
 ## Release Notes
 Can be found in [RELEASE_NOTES](RELEASE_NOTES.md).
 
