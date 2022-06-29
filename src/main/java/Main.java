@@ -8,8 +8,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,7 +23,7 @@ public class Main
     private static final Marker INVALID_STATIONS_MARKER = MarkerManager.getMarker("INVALID_STATIONS");
     private static final Marker EXCEPTION_MARKER = MarkerManager.getMarker("EXCEPTION");
 
-    private static String dataFile = "src/main/resources/map.json";
+    private static final String dataFile = "map.json";
     private static Scanner scanner;
 
     private static StationIndex stationIndex;
@@ -186,8 +188,14 @@ public class Main
     {
         StringBuilder builder = new StringBuilder();
         try {
-            List<String> lines = Files.readAllLines(Paths.get(dataFile));
-            lines.forEach(builder::append);
+            InputStream stream = Main.class.getResourceAsStream(dataFile);
+            int bufferSize = 1024;
+            char[] buffer = new char[bufferSize];
+            assert stream != null;
+            Reader in = new InputStreamReader(stream, StandardCharsets.UTF_8);
+            for (int numRead; (numRead = in.read(buffer, 0, buffer.length)) > 0; ) {
+                builder.append(buffer, 0, numRead);
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
